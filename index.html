@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartWaste | Intelligent Collection System</title>
+
+    <meta
+        name="description"
+        content="AI-Based Smart Waste Collection and Route Optimization System"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                <span>♻</span>
+            </div>
+
+            <div class="brand-text">
+                <h2>SmartWaste</h2>
+                <span>Collection Intelligence</span>
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-label">
+            MAIN MENU
+        </div>
+
+
+        <nav class="navigation">
+
+            <button class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </button>
+
+            <button class="nav-item" data-page="bins">
+                <span class="nav-icon">◉</span>
+                <span>Bin Monitoring</span>
+            </button>
+
+            <button class="nav-item" data-page="routes">
+                <span class="nav-icon">⌁</span>
+                <span>Route Planning</span>
+            </button>
+
+            <button class="nav-item" data-page="workers">
+                <span class="nav-icon">♙</span>
+                <span>Collection Workers</span>
+            </button>
+
+            <button class="nav-item" data-page="history">
+                <span class="nav-icon">◷</span>
+                <span>Collection History</span>
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-label second-label">
+            SYSTEM
+        </div>
+
+
+        <div class="system-links">
+
+            <button class="nav-item admin-only" data-page="add-worker" id="navAddWorker">
+                <span class="nav-icon">＋</span>
+                <span>Add Worker</span>
+            </button>
+
+            <button class="nav-item" data-page="settings">
+                <span class="nav-icon">⚙</span>
+                <span>System Settings</span>
+            </button>
+
+        </div>
+
+
+        <div class="sidebar-footer">
+
+            <div class="connection-card">
+
+                <div class="connection-top">
+                    <span class="online-dot"></span>
+                    <strong>System Online</strong>
+                </div>
+
+                <p>
+                    Prototype environment
+                </p>
+
+                <div class="connection-line"></div>
+
+                <div class="connection-bottom">
+                    <span>Last sync</span>
+                    <strong id="lastSync">Just now</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="page-heading">
+
+                <div class="mobile-brand">
+                    <div class="brand-mark small">
+                        ♻
+                    </div>
+                    <strong>SmartWaste</strong>
+                </div>
+
+                <div>
+                    <span class="section-label" id="sectionLabel">
+                        MUNICIPAL CONTROL
+                    </span>
+
+                    <h1 id="pageTitle">
+                        Dashboard
+                    </h1>
+                </div>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <div class="live-indicator">
+                    <span></span>
+                    Live Monitoring
+                </div>
+
+
+                <button
+                    class="icon-button notification-button"
+                    id="notificationButton"
+                    title="Notifications"
+                >
+                    ♢
+                    <span class="notification-count">3</span>
+                </button>
+
+
+                <div
+                    class="admin-profile role-switcher-btn"
+                    id="adminProfile"
+                    onclick="toggleRole()"
+                    title="Click to switch role: Administrator ⟷ Collection Worker"
+                >
+
+                    <div class="profile-avatar" id="userAvatar">
+                        W
+                    </div>
+
+                    <div class="profile-info">
+                        <strong id="userName">Wasim</strong>
+                        <span id="userRole">Administrator ▾</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section class="page active-page" id="dashboard">
+
+            <div class="hero-section">
+
+                <div>
+
+                    <span class="section-label">
+                        SYSTEM OVERVIEW
+                    </span>
+
+                    <h2>
+                        Good evening, Admin.
+                    </h2>
+
+                    <p>
+                        Monitor waste levels and prioritize collection
+                        across your service area.
+                    </p>
+
+                </div>
+
+
+                <div class="hero-actions">
+
+                    <button
+                        class="secondary-button"
+                        onclick="simulateSensorUpdate()"
+                    >
+                        ↻ Refresh Sensors
+                    </button>
+
+                    <button
+                        class="primary-button"
+                        onclick="showPage('routes')"
+                    >
+                        Generate Route →
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- KPI CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon blue">
+                            ◉
+                        </div>
+
+                        <span class="trend neutral">
+                            Live
+                        </span>
+
+                    </div>
+
+                    <div class="stat-number" id="totalBins">
+                        24
+                    </div>
+
+                    <div class="stat-label">
+                        Total Bins
+                    </div>
+
+                    <div class="stat-description">
+                        Monitored across all zones
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card danger-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon red">
+                            !
+                        </div>
+
+                        <span class="trend danger">
+                            Attention
+                        </span>
+
+                    </div>
+
+                    <div class="stat-number" id="urgentBins">
+                        5
+                    </div>
+
+                    <div class="stat-label">
+                        Urgent Bins
+                    </div>
+
+                    <div class="stat-description">
+                        Above 85% fill level
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card warning-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon orange">
+                            ◐
+                        </div>
+
+                        <span class="trend warning">
+                            Monitor
+                        </span>
+
+                    </div>
+
+                    <div class="stat-number" id="warningBins">
+                        7
+                    </div>
+
+                    <div class="stat-label">
+                        Warning Bins
+                    </div>
+
+                    <div class="stat-description">
+                        Between 65% and 85%
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card success-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon green">
+                            ✓
+                        </div>
+
+                        <span class="trend success">
+                            Today
+                        </span>
+
+                    </div>
+
+                    <div class="stat-number" id="collectedBins">
+                        8
+                    </div>
+
+                    <div class="stat-label">
+                        Collections
+                    </div>
+
+                    <div class="stat-description">
+                        Successfully completed
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MAIN DASHBOARD GRID -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- BIN STATUS -->
+
+                <div class="panel bin-status-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <h3>Current Bin Status</h3>
+                            <p>
+                                Latest sensor readings
+                            </p>
+                        </div>
+
+                        <button
+                            class="link-button"
+                            onclick="showPage('bins')"
+                        >
+                            View all →
+                        </button>
+
+                    </div>
+
+
+                    <div class="status-table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>BIN</th>
+                                    <th>LOCATION</th>
+                                    <th>FILL LEVEL</th>
+                                    <th>STATUS</th>
+                                    <th></th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="dashboardTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRIORITY -->
+
+                <div class="panel priority-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <h3>Collection Priority</h3>
+                            <p>
+                                Highest priority bins
+                            </p>
+                        </div>
+
+                        <span class="priority-badge">
+                            LIVE
+                        </span>
+
+                    </div>
+
+
+                    <div id="priorityList"></div>
+
+
+                    <button
+                        class="outline-button full-width"
+                        onclick="showPage('routes')"
+                    >
+                        View Collection Route
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOWER DASHBOARD -->
+
+            <div class="dashboard-lower-grid">
+
+
+                <!-- AREA DISTRIBUTION -->
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <h3>Area Status</h3>
+                            <p>
+                                Bin distribution by zone
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="area-list" id="areaList"></div>
+
+                </div>
+
+
+                <!-- ACTIVITY -->
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <h3>Recent Activity</h3>
+                            <p>
+                                Latest system events
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div id="activityList"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= BIN MONITORING ================= -->
+
+        <section class="page" id="bins">
+
+            <div class="page-intro">
+
+                <div>
+
+                    <span class="section-label">
+                        SENSOR MONITORING
+                    </span>
+
+                    <h2>
+                        Bin Monitoring
+                    </h2>
+
+                    <p>
+                        Monitor fill levels, locations and collection status.
+                    </p>
+
+                </div>
+
+                <button
+                    class="secondary-button"
+                    onclick="simulateSensorUpdate()"
+                >
+                    ↻ Simulate Sensor Update
+                </button>
+
+            </div>
+
+
+            <div class="filter-bar">
+
+                <div class="search-box">
+
+                    <span>⌕</span>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search bin or location..."
+                    >
+
+                </div>
+
+
+                <select id="statusFilter">
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="urgent">
+                        Urgent
+                    </option>
+
+                    <option value="warning">
+                        Warning
+                    </option>
+
+                    <option value="normal">
+                        Normal
+                    </option>
+
+                    <option value="collected">
+                        Collected
+                    </option>
+
+                </select>
+
+
+                <select id="areaFilter">
+
+                    <option value="all">
+                        All Areas
+                    </option>
+
+                    <option value="Zone A">
+                        Zone A
+                    </option>
+
+                    <option value="Zone B">
+                        Zone B
+                    </option>
+
+                    <option value="Zone C">
+                        Zone C
+                    </option>
+
+                    <option value="Zone D">
+                        Zone D
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="bin-grid" id="binGrid"></div>
+
+        </section>
+
+
+        <!-- ================= ROUTE PLANNING ================= -->
+
+        <section class="page" id="routes">
+
+            <div class="page-intro">
+
+                <div>
+
+                    <span class="section-label">
+                        PROCESSING ENGINE
+                    </span>
+
+                    <h2>
+                        Route Planning
+                    </h2>
+
+                    <p>
+                        Prioritize bins and prepare the collection sequence.
+                    </p>
+
+                </div>
+
+                <button
+                    class="primary-button"
+                    id="generateRouteBtn"
+                    onclick="generateRoute()"
+                >
+                    Generate New Route
+                </button>
+
+            </div>
+
+
+            <div class="route-grid">
+
+
+                <!-- ROUTE -->
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <h3>Today's Recommended Route</h3>
+                            <p id="routeSubtitle">
+                                Based on fill level and collection priority
+                            </p>
+                        </div>
+
+                        <span class="route-status" id="routeStatusBadge">
+                            READY
+                        </span>
+
+                    </div>
+
+
+                    <div class="route-line" id="routeList"></div>
+
+                </div>
+
+
+                <!-- SUMMARY -->
+
+                <div class="panel route-summary">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <h3>Route Summary</h3>
+                            <p>
+                                Current assignment
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-stat">
+
+                        <span>Priority Stops</span>
+                        <strong id="routeStops">5</strong>
+
+                    </div>
+
+
+                    <div class="summary-stat">
+
+                        <span>Assigned Worker</span>
+                        <strong>Worker 01</strong>
+
+                    </div>
+
+
+                    <div class="summary-stat">
+
+                        <span>Service Area</span>
+                        <strong>Zone A-D</strong>
+
+                    </div>
+
+
+                    <div class="summary-stat">
+
+                        <span>Route Priority</span>
+                        <strong class="text-danger">
+                            High
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        class="primary-button full-width route-start"
+                        onclick="showPage('workers')"
+                    >
+                        Start Collection
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ROUTE EXPLANATION -->
+
+            <div class="panel route-explanation">
+
+                <div class="explanation-icon">
+                    ✦
+                </div>
+
+                <div>
+
+                    <h3>
+                        How the priority works
+                    </h3>
+
+                    <p>
+                        The prototype ranks bins using their current
+                        fill level and collection status. Higher fill
+                        levels receive higher collection priority.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= WORKERS ================= -->
+
+        <section class="page" id="workers">
+
+            <div class="page-intro">
+
+                <div>
+
+                    <span class="section-label">
+                        COLLECTION OPERATIONS
+                    </span>
+
+                    <h2>
+                        Worker Dashboard
+                    </h2>
+
+                    <p>
+                        Manage assigned collection tasks and active routes.
+                    </p>
+
+                </div>
+
+                <div class="hero-actions">
+
+                    <button
+                        class="primary-button admin-only"
+                        id="btnAddWorkerTop"
+                        onclick="showPage('add-worker')"
+                    >
+                        + Add Worker
+                    </button>
+
+                    <div class="worker-online">
+                        <span></span>
+                        Worker online
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="worker-profile panel">
+
+                <div class="worker-profile-main">
+
+                    <div class="worker-avatar" id="workerAvatar">
+                        R
+                    </div>
+
+                    <div>
+
+                        <span class="section-label">
+                            COLLECTION WORKER
+                        </span>
+
+                        <div style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">
+                            <h3 id="currentWorkerName">
+                                Worker 01
+                            </h3>
+
+                            <select
+                                id="workerSelect"
+                                class="worker-select-control"
+                                onchange="selectActiveWorker(this.value)"
+                                title="Switch Active Worker"
+                            >
+                                <option value="Worker 01">Worker 01 (Zone A)</option>
+                            </select>
+                        </div>
+
+                        <p id="currentWorkerArea">
+                            Assigned area: Zone A
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="worker-metrics">
+
+                    <div>
+                        <span>Assigned</span>
+                        <strong id="assignedCount">
+                            5
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Completed</span>
+                        <strong id="workerCompleted">
+                            0
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Remaining</span>
+                        <strong id="workerRemaining">
+                            5
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="worker-grid" id="workerGrid"></div>
+
+        </section>
+
+
+        <!-- ================= ADD WORKER (ADMIN ONLY TAB) ================= -->
+
+        <section class="page" id="add-worker">
+
+            <div class="page-intro">
+
+                <div>
+
+                    <span class="section-label">
+                        ADMINISTRATION & DISPATCH
+                    </span>
+
+                    <h2>
+                        Register Collection Worker
+                    </h2>
+
+                    <p>
+                        Add new collection personnel, assign service zones, and configure collection vehicle.
+                    </p>
+
+                </div>
+
+                <div class="worker-online">
+                    <span></span>
+                    Admin Privileges Active
+                </div>
+
+            </div>
+
+
+            <div class="worker-form-grid">
+
+                <!-- FORM PANEL -->
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Worker Credentials & Logistics</h3>
+                            <p>Complete the fields below to register a new employee in the database</p>
+                        </div>
+                        <span class="priority-badge">
+                            ADMIN EXCLUSIVE
+                        </span>
+                    </div>
+
+                    <form id="addWorkerForm" onsubmit="handleWorkerSubmit(event)">
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label class="form-label" for="workerFullName">Full Name *</label>
+                                <input
+                                    type="text"
+                                    id="workerFullName"
+                                    class="form-input"
+                                    placeholder="e.g. Johnathan Vance"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="workerIdInput">Worker ID / Badge *</label>
+                                <input
+                                    type="text"
+                                    id="workerIdInput"
+                                    class="form-input"
+                                    placeholder="e.g. Worker 02"
+                                    required
+                                >
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label class="form-label" for="workerZoneSelect">Assigned Service Zone *</label>
+                                <select id="workerZoneSelect" class="form-select" required>
+                                    <option value="Zone A">Zone A - Downtown / Market</option>
+                                    <option value="Zone B">Zone B - Metro / Station</option>
+                                    <option value="Zone C">Zone C - Park / Residential</option>
+                                    <option value="Zone D">Zone D - Hospital / Old Town</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="workerPhone">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    id="workerPhone"
+                                    class="form-input"
+                                    placeholder="+1 (555) 019-2834"
+                                >
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label class="form-label" for="workerTruckInput">Assigned Truck ID</label>
+                                <input
+                                    type="text"
+                                    id="workerTruckInput"
+                                    class="form-input"
+                                    placeholder="e.g. Truck T-04"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="workerVehicleType">Vehicle Engine Type</label>
+                                <select id="workerVehicleType" class="form-select">
+                                    <option value="diesel">Diesel Compactor</option>
+                                    <option value="electric">Electric EV Compactor</option>
+                                    <option value="hybrid">Hybrid Compactor</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label class="form-label" for="workerShift">Shift Assignment</label>
+                                <select id="workerShift" class="form-select">
+                                    <option value="On Shift">Morning Shift (06:00 - 14:00)</option>
+                                    <option value="Afternoon">Afternoon Shift (14:00 - 22:00)</option>
+                                    <option value="Night">Night Shift (22:00 - 06:00)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="workerCapacity">Truck Capacity (Tons)</label>
+                                <input
+                                    type="number"
+                                    step="0.5"
+                                    min="1.0"
+                                    max="15.0"
+                                    id="workerCapacity"
+                                    class="form-input"
+                                    value="2.5"
+                                >
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <button type="submit" class="primary-button" id="btnSubmitWorker">
+                                + Register Worker in Database
+                            </button>
+
+                            <button
+                                type="button"
+                                class="secondary-button"
+                                onclick="showPage('workers')"
+                            >
+                                Cancel
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- REGISTERED WORKERS OVERVIEW PANEL -->
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Registered Workers</h3>
+                            <p>Personnel registered in database</p>
+                        </div>
+                        <span class="route-status" id="registeredWorkerCount">
+                            -- Workers
+                        </span>
+                    </div>
+
+                    <div class="worker-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Worker</th>
+                                    <th>Zone</th>
+                                    <th>Truck</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registeredWorkersList">
+                                <!-- Populated dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= HISTORY ================= -->
+
+        <section class="page" id="history">
+
+            <div class="page-intro">
+
+                <div>
+
+                    <span class="section-label">
+                        DATABASE RECORDS
+                    </span>
+
+                    <h2>
+                        Collection History
+                    </h2>
+
+                    <p>
+                        Historical records of completed waste collection.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="history-summary">
+
+                <div class="mini-stat panel">
+
+                    <span>Today's Collections</span>
+
+                    <strong id="historyTotal">
+                        8
+                    </strong>
+
+                </div>
+
+                <div class="mini-stat panel">
+
+                    <span>Active Workers</span>
+
+                    <strong>
+                        4
+                    </strong>
+
+                </div>
+
+                <div class="mini-stat panel">
+
+                    <span>Completed Routes</span>
+
+                    <strong>
+                        3
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="table-heading">
+
+                    <div>
+                        <h3>Collection Records</h3>
+                        <p>
+                            Stored collection activity
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="status-table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>COLLECTION ID</th>
+                                <th>BIN ID</th>
+                                <th>WORKER</th>
+                                <th>LOCATION</th>
+                                <th>TIME</th>
+                                <th>STATUS</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="historyTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SETTINGS ================= -->
+
+        <section class="page" id="settings">
+
+            <div class="page-intro">
+
+                <div>
+
+                    <span class="section-label">
+                        SYSTEM
+                    </span>
+
+                    <h2>
+                        System Settings
+                    </h2>
+
+                    <p>
+                        Prototype configuration.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+                <div class="panel setting-card">
+
+                    <div class="setting-icon">
+                        ◉
+                    </div>
+
+                    <div>
+                        <h3>
+                            Sensor Monitoring
+                        </h3>
+
+                        <p>
+                            Simulated sensor readings are enabled.
+                        </p>
+                    </div>
+
+                    <label class="toggle">
+
+                        <input
+                            type="checkbox"
+                            checked
+                            id="sensorToggle"
+                        >
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="panel setting-card">
+
+                    <div class="setting-icon">
+                        ◈
+                    </div>
+
+                    <div>
+                        <h3>
+                            Priority Alerts
+                        </h3>
+
+                        <p>
+                            Show alerts for high-fill bins.
+                        </p>
+                    </div>
+
+                    <label class="toggle">
+
+                        <input
+                            type="checkbox"
+                            checked
+                        >
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="panel setting-card">
+
+                    <div class="setting-icon">
+                        ◷
+                    </div>
+
+                    <div>
+                        <h3>
+                            Auto Refresh
+                        </h3>
+
+                        <p>
+                            Refresh prototype data automatically.
+                        </p>
+                    </div>
+
+                    <label class="toggle">
+
+                        <input
+                            type="checkbox"
+                            checked
+                        >
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= BIN DETAILS MODAL ================= -->
+
+<div
+    class="modal-overlay"
+    id="binModal"
+>
+
+    <div class="modal">
+
+        <button
+            class="modal-close"
+            onclick="closeModal()"
+        >
+            ×
+        </button>
+
+
+        <span class="section-label">
+            SENSOR DETAILS
+        </span>
+
+        <div class="modal-title-row">
+
+            <div>
+
+                <h2 id="modalBinId">
+                    B001
+                </h2>
+
+                <p id="modalLocation">
+                    Zone A
+                </p>
+
+            </div>
+
+            <span
+                class="status-badge"
+                id="modalStatus"
+            >
+                Urgent
+            </span>
+
+        </div>
+
+
+        <div class="fill-display">
+
+            <div class="fill-display-top">
+
+                <span>
+                    Current Fill Level
+                </span>
+
+                <strong id="modalFill">
+                    92%
+                </strong>
+
+            </div>
+
+
+            <div class="large-progress">
+
+                <div
+                    id="modalProgress"
+                    style="width:92%"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-details">
+
+            <div>
+                <span>Sensor ID</span>
+                <strong id="modalSensor">
+                    S001
+                </strong>
+            </div>
+
+            <div>
+                <span>Last Updated</span>
+                <strong id="modalTime">
+                    10:42 AM
+                </strong>
+            </div>
+
+            <div>
+                <span>Collection</span>
+                <strong id="modalCollection">
+                    Pending
+                </strong>
+            </div>
+
+            <div>
+                <span>Zone</span>
+                <strong id="modalZone">
+                    Zone A
+                </strong>
+            </div>
+
+        </div>
+
+
+        <button
+            class="primary-button full-width"
+            id="modalAction"
+        >
+            Mark as Collected
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= NOTIFICATION PANEL ================= -->
+
+<div
+    class="notification-panel"
+    id="notificationPanel"
+>
+
+    <div class="notification-header">
+
+        <div>
+            <h3>Notifications</h3>
+            <p>System alerts</p>
+        </div>
+
+        <button onclick="closeNotifications()">
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="notification-item urgent-notification">
+
+        <span>!</span>
+
+        <div>
+            <strong>High fill detected</strong>
+            <p>
+                B007 has reached 95%.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="notification-item warning-notification">
+
+        <span>◐</span>
+
+        <div>
+            <strong>Route requires attention</strong>
+            <p>
+                5 priority stops are pending.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="notification-item success-notification">
+
+        <span>✓</span>
+
+        <div>
+            <strong>System online</strong>
+            <p>
+                All prototype modules are operational.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+    <span>✓</span>
+    <p id="toastMessage">
+        Action completed
+    </p>
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>

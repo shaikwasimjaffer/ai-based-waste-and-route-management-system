@@ -1,0 +1,11 @@
+{
+  "liveServer.settings.ignoreFiles": [
+    "**/*.db*",
+    "**/*.sqlite*",
+    "**/*.log",
+    "**/backend/**",
+    "**/.env",
+    "**/.git/**"
+  ],
+  "liveServer.settings.wait": 1000
+}
