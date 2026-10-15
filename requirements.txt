@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Flask>=3.0.0
 flask-cors>=4.0.0
 SQLAlchemy>=2.0.0
@@ -5,3 +6,6 @@ psycopg2-binary>=2.9.0
 pandas>=2.0.0
 openpyxl>=3.1.0
 python-dotenv>=1.0.0
+=======
+# Add Python dependencies here
+>>>>>>> c87fdb0b7a8b786d4a190331fc2a24d86373ea95
